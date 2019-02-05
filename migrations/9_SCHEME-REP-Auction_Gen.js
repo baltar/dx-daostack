@@ -43,22 +43,31 @@ module.exports = async function (deployer) {
 
   console.log('Configure DxGenAuction4Rep')
 
+  const auctionPeriod = Math.floor(
+    (dateUtil.toEthereumTimestamp(initialDistributionEnd) - dateUtil.toEthereumTimestamp(initialDistributionStart))
+    / numberOfGenAuctions
+  )
+
+  const reputationRewardPerAuction = Math.floor(reputationReward / numberOfGenAuctions)
+
   const walletAddress = dxAvatar.address
   console.log('  - Avatar address:', dxAvatar.address)
   console.log('  - Reputation reward:', reputationReward)
+  console.log('  - Reputation reward per auction:', reputationRewardPerAuction)
   console.log('  - Auction start time:', dateUtil.formatDateTime(initialDistributionStart))
   console.log('  - Auction end time:', dateUtil.formatDateTime(initialDistributionEnd))
   console.log('  - Redeem enable time:', dateUtil.formatDateTime(redeemStart))
   console.log('  - Number of auctions:', numberOfGenAuctions)
+  console.log('  - Auction period (end - start)/number of auctions:', auctionPeriod)
   // QUESTION: is GEN token - staking token?
   console.log('  - Staking token address (GEN):', genToken.address)
   console.log('  - wallet address (DxAvatar.address): ', walletAddress)
 
   await dxGenAuction4Rep.initialize(
     dxAvatar.address,
-    reputationReward,
+    reputationRewardPerAuction,
     dateUtil.toEthereumTimestamp(initialDistributionStart),
-    dateUtil.toEthereumTimestamp(initialDistributionEnd),
+    auctionPeriod,
     numberOfGenAuctions,
     dateUtil.toEthereumTimestamp(redeemStart),
     genToken.address,
