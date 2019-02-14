@@ -169,7 +169,7 @@ async function displayExpectedRep(data, contracts) {
   const { GenAuctionIdsWithBids, GENtotalDistributedRep } = GenTotalBidsPerAuction.reduce(
     (accum, bid, auctionId) => {
       if (bid.gt(new BN(0))) {
-        accum.GENtotalDistributedRep = accum.GENtotalDistributedRep.add(bid)
+        accum.GENtotalDistributedRep = accum.GENtotalDistributedRep.add(GENauctionReputationReward)
         accum.GenAuctionIdsWithBids.push(auctionId)
       }
       return accum
@@ -180,6 +180,7 @@ async function displayExpectedRep(data, contracts) {
   console.log('\nAll REP potentially earned from DxGenAuction4Rep:', GENtotalPotentialRep.div(decimals18).toString(), 'over', GENnumberOfAuctions.toString(), 'auctions');
 
   if (!GENtotalPotentialRep.eq(GENtotalDistributedRep)) {
+    // prints auction ids starting from 1 index to match the UI
     console.log('Distributed only', GENtotalDistributedRep.div(decimals18).toString(), 'from auctions:', GenAuctionIdsWithBids.map(i => i + 1).join(', '));
   }
 
