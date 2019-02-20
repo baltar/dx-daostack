@@ -4,7 +4,7 @@ const HDWalletProvider = require('truffle-hdwallet-provider')
 const DEFAULT_MNEMONIC = 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
 const SECRET_ENV_VARS = ['PK', 'MNEMNONIC', 'CRYPTO_COMPARE_API_KEY']
 
-const SOLC_VERSION = '0.5.2'
+const SOLC_VERSION = '0.5.4'
 process.env.SOLC_USE_DOCKER === 'true'
 
 // Load env vars
