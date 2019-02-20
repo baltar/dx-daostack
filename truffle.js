@@ -4,6 +4,9 @@ const HDWalletProvider = require('truffle-hdwallet-provider')
 const DEFAULT_MNEMONIC = 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
 const SECRET_ENV_VARS = ['PK', 'MNEMNONIC', 'CRYPTO_COMPARE_API_KEY']
 
+const SOLC_VERSION = '0.5.2'
+process.env.SOLC_USE_DOCKER === 'true'
+
 // Load env vars
 const envPath = process.env.ENV_PATH
 const { error, parsed } = require('dotenv').config(envPath && { path: envPath })
@@ -11,6 +14,8 @@ if (envPath && error) {
   console.error('Error configuring ENV vars')
   throw error
 }
+
+const solcUseDocker = process.env.SOLC_USE_DOCKER === 'true'
 
 if (envPath) {
   console.log(`
@@ -71,6 +76,8 @@ function truffleConfig({
   portDevelopment = 8545
 } = {}) {
   assert(mnemonic, 'The mnemonic has not been provided');
+  console.log(`Using solc version ${SOLC_VERSION}`)
+  console.log(`Using docker compiler: ${solcUseDocker ? 'Yes' : 'No'}`)
   console.log(`Using gas limit: ${gas / 1000} K`);
   console.log(`Using gas price: ${gasPriceGWei} Gwei`);
   console.log(`Optimizer enabled: ${optimizedEnabled}`);
@@ -124,8 +131,8 @@ function truffleConfig({
     },
     compilers: {
       solc: {
-        version: '0.5.2',
-        docker: process.env.SOLC_USE_DOCKER === 'true' || false,
+        version: SOLC_VERSION,
+        docker: solcUseDocker || false,
         settings: {
           optimizer: {
             enabled: optimizedEnabled, // Default: false
